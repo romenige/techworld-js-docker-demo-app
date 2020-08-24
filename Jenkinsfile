@@ -1,3 +1,4 @@
+def gv
 
 pipeline {
   
@@ -15,6 +16,14 @@ pipeline {
   
   stages {
     
+    stage("init") {
+      steps {
+        script {
+          gv = load "script.groovy"
+        }
+      }
+    }
+    
     stage("build") {
      /* when {
         expression {
@@ -22,8 +31,11 @@ pipeline {
         }
       }*/
       steps {
-        echo 'building the application...'
-        echo "building version ${params.VERSION}"
+        //echo 'building the application...'
+        //echo "building version ${params.VERSION}"
+        script {
+          gv.buildApp()
+        }
       }
     }
     
@@ -34,14 +46,18 @@ pipeline {
         }
       }*/
       steps {
-        echo 'testing the application...'
+       // echo 'testing the application...'
+        script {
+          gv.testApp()
+        }
       }
     }
     
     stage("deploy") {
       
       steps {
-        echo'deploying the application...'
+        //echo'deploying the application...'
+        gv.deployApp()
       }
     }
   }
